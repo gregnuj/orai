@@ -8,7 +8,6 @@ RUN apk add upx bash jq
 # NOTE: add these to run with LEDGER_ENABLED=true
 # RUN apk add libusb-dev linux-headers
 
-ARG WASMVM_VERSION
 ARG VERSION
 
 WORKDIR /workspace
@@ -22,6 +21,7 @@ COPY orai/Makefile /workspace/
 # See https://github.com/Oraichain/wasmvm/releases
 RUN set -eux; \    
     export ARCH=$(uname -m); \
+    export WASMVM_VERSION=$(go list -m github.com/CosmWasm/wasmvm  | awk '{print $NF}'); \
     wget -O /lib/libwasmvm_muslc.a https://github.com/oraichain/wasmvm/releases/download/${WASMVM_VERSION}/libwasmvm_muslc.${ARCH}.a;
 
 RUN go mod download
